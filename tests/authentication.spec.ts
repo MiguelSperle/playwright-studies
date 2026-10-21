@@ -1,44 +1,61 @@
 import { test, expect } from '@playwright/test';
-import { AuthenticationBase } from '../utils/AuthenticationBase';
+import { AuthenticationPage } from '../pages/AuthenticationPage';
 
-test.describe("Authentication features", () => {
-  let authenticationBase: AuthenticationBase;
+test.describe("Authentication", () => {
+  let authenticationPage: AuthenticationPage;
 
   test.beforeEach(async ({ page }) => {
-    authenticationBase = new AuthenticationBase(page);
-    await authenticationBase.open();
+    authenticationPage = new AuthenticationPage(page);
+    await authenticationPage.open();
   });
 
   test('should be able to authenticate with valid credentials', async ({ page }) => {
-    await authenticationBase.authenticate("standard_user", "secret_sauce");
+    const username = "standard_user";
+    const password = "secret_sauce";
 
-    await expect(page).toHaveURL("/inventory.html");
-    await expect(page.getByText("Products")).toBeVisible();
+    await authenticationPage.usernameInput.fill(username);
+    await authenticationPage.passwordInput.fill(password);
+
+    await authenticationPage.authenticationButton.click();
+
+    const expectedUrl = "/inventory.html";
+    const expectedTitle = "Products";
+
+    await expect(page).toHaveURL(expectedUrl);
+    await expect(page.getByText(expectedTitle)).toBeVisible();
   });
 
   test("should not be able to authenticate when using empty credentials", async ({ page }) => {
-    await authenticationBase.authenticationButton.click();
+    await authenticationPage.authenticationButton.click();
 
-    await expect(page).toHaveURL("/");
-    await expect(page.getByText("Epic sadface: Username is required")).toBeVisible();
+    const expectedErrorMessage = "Epic sadface: Username is required";
+
+    await expect(page.getByText(expectedErrorMessage)).toBeVisible();
   });
 
-  test("should not be able to authenticate when using empty password", async ({ page }) => {
-    await authenticationBase.usernameInput.fill("standard_user");
+  test("should not be able to authenticate when using an empty password", async ({ page }) => {
+    const username = "standard_user";
 
-    await authenticationBase.authenticationButton.click();
+    await authenticationPage.usernameInput.fill(username);
 
-    await expect(page).toHaveURL("/");
-    await expect(page.getByText("Epic sadface: Password is required")).toBeVisible();
+    await authenticationPage.authenticationButton.click();
+
+    const expectedErrorMessage = "Epic sadface: Password is required";
+
+    await expect(page.getByText(expectedErrorMessage)).toBeVisible();
   });
 
   test("should not be able to authenticate when using invalid credentials", async ({ page }) => {
-    await authenticationBase.usernameInput.fill("invalid_user");
-    await authenticationBase.passwordInput.fill("invalid_password");
+    const username = "invalid_user";
+    const passsword = "invalid_password";
 
-    await authenticationBase.authenticationButton.click();
+    await authenticationPage.usernameInput.fill(username);
+    await authenticationPage.passwordInput.fill(passsword);
 
-    await expect(page).toHaveURL("/");
-    await expect(page.getByText("Epic sadface: Username and password do not match any user in this service")).toBeVisible();
+    await authenticationPage.authenticationButton.click();
+
+    const expectedErrorMessage = "Epic sadface: Username and password do not match any user in this service";
+
+    await expect(page.getByText(expectedErrorMessage)).toBeVisible();
   });
 });
