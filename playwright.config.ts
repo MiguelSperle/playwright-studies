@@ -8,9 +8,16 @@ import { defineConfig, devices } from '@playwright/test';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+const authFile = 'playwright/.auth/user.json';
+
+const browsers = [
+  { name: 'chromium', device: devices['Desktop Chrome'] },
+  { name: 'firefox', device: devices['Desktop Firefox'] },
+  { name: 'webkit', device: devices['Desktop Safari'] },
+];
+
+// Define guest specs
+const guestSpecs = ['**/authentication.spec.ts'];
 
 export default defineConfig({
   testDir: './tests',
@@ -24,8 +31,22 @@ export default defineConfig({
     trace: 'on-first-retry'
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    // SETUP
+    { name: 'setup', testMatch: '**/auth.setup.ts' },
+
+    // GUEST 
+    ...browsers.map(({ name, device }) => ({
+      name: `guest-${name}`,
+      testMatch: guestSpecs,
+      use: { ...device },
+    })),
+
+    // AUTHENTICATED
+    ...browsers.map(({ name, device }) => ({
+      name: `authenticated-${name}`,
+      testIgnore: ['**/auth.setup.ts', ...guestSpecs],
+      use: { ...device, storageState: authFile },
+      dependencies: ['setup'],
+    })),
   ],
 });
