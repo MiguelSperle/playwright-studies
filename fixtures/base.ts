@@ -1,0 +1,20 @@
+import { test as base } from '@playwright/test';
+import { AuthenticationPage } from '../pages/AuthenticationPage';
+import { InventoryPage } from '../pages/InventoryPage';
+
+type PageFixtures = {
+  authenticationPage: AuthenticationPage;
+  inventoryPage: InventoryPage;
+};
+
+export const test = base.extend<PageFixtures>({
+  authenticationPage: async ({ page }, use) => {
+    await use(new AuthenticationPage(page));
+  },
+
+  inventoryPage: async ({ page }, use) => {
+    await use(new InventoryPage(page));
+  }
+});
+
+export { expect } from '@playwright/test';
