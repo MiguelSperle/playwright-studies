@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test';
-import { AuthenticationPage } from '../pages/AuthenticationPage';
-import { InventoryPage } from '../pages/InventoryPage';
+import { AuthenticationPage } from '../pages/authentication-page';
+import { InventoryPage } from '../pages/inventory-page';
 
 type PageFixtures = {
   authenticationPage: AuthenticationPage;

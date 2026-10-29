@@ -3,7 +3,7 @@ import { test as setup, expect } from '../../fixtures/base';
 const authFile = 'playwright/.auth/user.json';
 
 setup('authenticate', async ({ authenticationPage, page, context }) => {
-  await authenticationPage.navigate();
+  await authenticationPage.open();
 
   await authenticationPage.authenticate('standard_user', 'secret_sauce');
 

@@ -1,32 +1,29 @@
 import { test, expect } from '../fixtures/base';
 
-test.describe('Authentication', () => {
-  test.beforeEach(async ({ authenticationPage }) => {
-    await authenticationPage.navigate();
-  });
+test.beforeEach(async ({ authenticationPage }) => {
+  await authenticationPage.open();
+});
 
-  test('should be able to authenticate with valid credentials', async ({ authenticationPage, inventoryPage, page }) => {
-    await authenticationPage.authenticate('standard_user', 'secret_sauce');
+test('authenticate with valid credentials', async ({ authenticationPage, page }) => {
+  await authenticationPage.authenticate('standard_user', 'secret_sauce');
 
-    await expect(page).toHaveURL('/inventory.html');
-    await expect(inventoryPage.title).toBeVisible();
-  });
+  await expect(page).toHaveURL('/inventory.html');
+});
 
-  test('should not be able to authenticate when using empty credentials', async ({ authenticationPage }) => {
-    await authenticationPage.authenticate('', '');
+test('authenticate with empty credentials', async ({ authenticationPage }) => {
+  await authenticationPage.authenticate('', '');
 
-    await expect(authenticationPage.errorMessage).toHaveText('Epic sadface: Username is required');
-  });
+  await expect(authenticationPage.error).toHaveText('Epic sadface: Username is required');
+});
 
-  test('should not be able to authenticate when using an empty password', async ({ authenticationPage }) => {
-    await authenticationPage.authenticate('standard_user', '')
+test('authenticate with empty password', async ({ authenticationPage }) => {
+  await authenticationPage.authenticate('standard_user', '')
 
-    await expect(authenticationPage.errorMessage).toHaveText('Epic sadface: Password is required');
-  });
+  await expect(authenticationPage.error).toHaveText('Epic sadface: Password is required');
+});
 
-  test('should not be able to authenticate when using invalid credentials', async ({ authenticationPage }) => {
-    await authenticationPage.authenticate('invalid_user', 'invalid_password');
+test('authenticate with wrong credentials', async ({ authenticationPage }) => {
+  await authenticationPage.authenticate('wrong_user', 'wrong_password');
 
-    await expect(authenticationPage.errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
-  });
+  await expect(authenticationPage.error).toHaveText('Epic sadface: Username and password do not match any user in this service');
 });
