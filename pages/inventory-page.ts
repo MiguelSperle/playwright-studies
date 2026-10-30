@@ -2,15 +2,14 @@ import { Page, Locator } from '@playwright/test';
 
 export class InventoryPage {
     readonly products: Locator;
-    readonly shoppingCartBagde: Locator;
+    readonly shoppingCartBadge: Locator;
 
     constructor(readonly page: Page) {
-        this.page = page;
         this.products = this.page.getByTestId('inventory-item');
-        this.shoppingCartBagde = this.page.getByTestId('shopping-cart-badge');
+        this.shoppingCartBadge = this.page.getByTestId('shopping-cart-badge');
     }
 
-    async open() {
+    async goto() {
         await this.page.goto("/inventory.html");
     }
 

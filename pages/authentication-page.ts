@@ -14,7 +14,7 @@ export class AuthenticationPage {
         this.error = this.page.getByTestId('error');
     }
 
-    async open() {
+    async goto() {
         await this.page.goto('/');
     }
 
