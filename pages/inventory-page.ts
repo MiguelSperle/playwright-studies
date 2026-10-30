@@ -2,11 +2,9 @@ import { Page, Locator } from '@playwright/test';
 
 export class InventoryPage {
     readonly products: Locator;
-    readonly shoppingCartBadge: Locator;
 
     constructor(readonly page: Page) {
         this.products = this.page.getByTestId('inventory-item');
-        this.shoppingCartBadge = this.page.getByTestId('shopping-cart-badge');
     }
 
     async goto() {

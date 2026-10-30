@@ -1,20 +1,7 @@
-import { test as base } from '@playwright/test';
-import { AuthenticationPage } from '../pages/authentication-page';
-import { InventoryPage } from '../pages/inventory-page';
+import { mergeTests } from '@playwright/test';
+import { pageTest } from './page-fixture';
+import { componentTest } from './component-fixture';
 
-type PageFixtures = {
-  authenticationPage: AuthenticationPage;
-  inventoryPage: InventoryPage;
-};
-
-export const test = base.extend<PageFixtures>({
-  authenticationPage: async ({ page }, use) => {
-    await use(new AuthenticationPage(page));
-  },
-
-  inventoryPage: async ({ page }, use) => {
-    await use(new InventoryPage(page));
-  }
-});
+export const test = mergeTests(pageTest, componentTest);
 
 export { expect } from '@playwright/test';

@@ -1,12 +1,12 @@
 import { test, expect } from '../fixtures/base';
 import { users } from '../data/users';
 
-test.describe('Authentication feature', () => {
+test.describe('authentication feature', () => {
   test.beforeEach(async ({ authenticationPage }) => {
     await authenticationPage.goto();
   });
 
-  test.describe('With valid credentials', () => {
+  test.describe('with valid credentials', () => {
     test('should authenticate successfully', async ({ authenticationPage, page }) => {
       await authenticationPage.authenticate(users.STANDARD_USER.username, users.STANDARD_USER.password);
 
@@ -14,7 +14,7 @@ test.describe('Authentication feature', () => {
     });
   });
 
-  test.describe('With invalid credentials', () => {
+  test.describe('with invalid credentials', () => {
     test('should display an error when credentials are empty', async ({ authenticationPage }) => {
       await authenticationPage.authenticate('', '');
 
