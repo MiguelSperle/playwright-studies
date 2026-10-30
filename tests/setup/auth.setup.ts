@@ -1,12 +1,12 @@
 import { test as setup, expect } from '../../fixtures/base';
-import { USER } from '../../data/users';
+import { users } from '../../data/users';
 
 const authFile = 'playwright/.auth/user.json';
 
 setup('configure authenticated user', async ({ authenticationPage, page, context }) => {
   await authenticationPage.goto();
 
-  await authenticationPage.authenticate(USER.STANDARD.username, USER.STANDARD.password);
+  await authenticationPage.authenticate(users.STANDARD_USER.username, users.STANDARD_USER.password);
 
   await expect(page).toHaveURL('/inventory.html');
 
