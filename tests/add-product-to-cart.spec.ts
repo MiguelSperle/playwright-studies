@@ -14,4 +14,17 @@ test.describe('add product to cart feature', () => {
             await expect(inventoryPage.removeFromCartButton(products.BACKPACK_PRODUCT.name)).toBeVisible();
         });
     });
+
+    test.describe('from the product details page', () => {
+        test.beforeEach(async ({ productDetailsPage }) => {
+            await productDetailsPage.goto(products.BACKPACK_PRODUCT.id);
+        });
+
+        test('should add the product to the cart', async ({ productDetailsPage, headerComponent }) => {
+            await productDetailsPage.clickAddToCartButton();
+
+            await expect(headerComponent.shoppingCartBadge).toHaveText('1');
+            await expect(productDetailsPage.removeFromCartButton).toBeVisible();
+        });
+    });
 });
