@@ -16,4 +16,8 @@ export class ProductDetailsPage {
     async clickAddToCartButton() {
         await this.addToCartButton.click();
     }
+
+    async clickRemoveFromCartButton() {
+        await this.removeFromCartButton.click();
+    }
 }
