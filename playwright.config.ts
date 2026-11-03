@@ -17,7 +17,7 @@ const browsers = [
 ];
 
 // Define guest specs
-const guestSpecs = ['**/authenticate.spec.ts'];
+const guestSpecs = ['**/authentication.spec.ts'];
 
 export default defineConfig({
   testDir: './tests',
