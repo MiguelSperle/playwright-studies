@@ -1,8 +1,8 @@
 import { test, expect } from '../fixtures';
 import { products } from '../data/products';
 
-test.describe('shopping cart features', () => {
-    test.describe('from inventory page, starting with empty shopping cart', () => {
+test.describe('shopping cart', () => {
+    test.describe('from the inventory page', () => {
         test.beforeEach(async ({ pm }) => {
             await pm.onInventoryPage().goto();
         });
@@ -22,22 +22,51 @@ test.describe('shopping cart features', () => {
             await expect(pm.onInventoryPage().removeFromCartButton(products.BACKPACK_PRODUCT.name)).toBeVisible();
             await expect(pm.onInventoryPage().removeFromCartButton(products.BIKE_LIGHT_PRODUCT.name)).toBeVisible();
         });
-    });
 
-    test.describe('from inventory page, starting with products in the cart', () => {
-        test('should remove an added product from the shopping cart', async ({ pm, shoppingCartWithProduct }) => {
+        test('should remove an added product from the shopping cart', async ({ pm }) => {
+            // PREPARANDO O ESTADO NECESSÁRIO DIRETAMENTE NO TESTE
+            await pm.onInventoryPage().clickAddToCartButton(products.BACKPACK_PRODUCT.name);
+
             await pm.onInventoryPage().clickRemoveFromCartButton(products.BACKPACK_PRODUCT.name);
 
             await expect(pm.onInventoryPage().headerComponent.shoppingCartBadge).toBeHidden();
             await expect(pm.onInventoryPage().addToCartButton(products.BACKPACK_PRODUCT.name)).toBeVisible();
         });
 
-        test('should remove only a product from the shopping cart when multiple products have been added', async ({ pm, shoppingCartWithMultipleProducts }) => {
+        test('should remove only one product when multiple products have been added to the shopping cart', async ({ pm }) => {
+            // PREPARANDO O ESTADO NECESSÁRIO DIRETAMENTE NO TESTE
+            await pm.onInventoryPage().clickAddToCartButton(products.BACKPACK_PRODUCT.name);
+            await pm.onInventoryPage().clickAddToCartButton(products.BIKE_LIGHT_PRODUCT.name);
+
             await pm.onInventoryPage().clickRemoveFromCartButton(products.BACKPACK_PRODUCT.name);
 
             await expect(pm.onInventoryPage().headerComponent.shoppingCartBadge).toHaveText('1');
             await expect(pm.onInventoryPage().addToCartButton(products.BACKPACK_PRODUCT.name)).toBeVisible();
             await expect(pm.onInventoryPage().removeFromCartButton(products.BIKE_LIGHT_PRODUCT.name)).toBeVisible();
+        });
+
+    });
+
+    test.describe('from the product details page', () => {
+        test.beforeEach(async ({ pm }) => {
+            await pm.onProductDetailsPage().goto(products.BACKPACK_PRODUCT.id);
+        });
+
+        test('should add a product to the shopping cart', async ({ pm }) => {
+            await pm.onProductDetailsPage().clickAddToCartButton();
+
+            await expect(pm.onProductDetailsPage().headerComponent.shoppingCartBadge).toHaveText('1');
+            await expect(pm.onProductDetailsPage().removeFromCartButton).toBeVisible();
+        });
+
+        test('should remove an added product from the shopping cart', async ({ pm }) => {
+            // PREPARANDO O ESTADO NECESSÁRIO DIRETAMENTE NO TESTE
+            await pm.onProductDetailsPage().clickAddToCartButton();
+
+            await pm.onProductDetailsPage().clickRemoveFromCartButton();
+
+            await expect(pm.onProductDetailsPage().headerComponent.shoppingCartBadge).toBeHidden();
+            await expect(pm.onProductDetailsPage().addToCartButton).toBeVisible();
         });
     });
 });

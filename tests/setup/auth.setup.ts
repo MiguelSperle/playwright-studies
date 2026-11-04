@@ -11,12 +11,12 @@ import { users } from '../../data/users';
 
 const authFile: string = 'playwright/.auth/user.json';
 
-setup('configure authenticated user', async ({ pm, page, context }) => {
+setup('configure authenticated user', async ({ pm, page }) => {
   await pm.onAuthenticationPage().goto();
 
   await pm.onAuthenticationPage().authenticate(users.STANDARD_USER.username, users.STANDARD_USER.password);
 
   await expect(page).toHaveURL('/inventory.html');
 
-  await context.storageState({ path: authFile });
+  await page.context().storageState({ path: authFile });
 }); 
