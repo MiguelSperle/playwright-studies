@@ -7,7 +7,6 @@ export class AuthenticationPage {
     readonly error: Locator;
 
     constructor(readonly page: Page) {
-        this.page = page;
         this.usernameInput = this.page.getByLabel('Username');
         this.passwordInput = this.page.getByLabel('Password');
         this.authenticationButton = this.page.getByRole('button', { name: 'Login' });

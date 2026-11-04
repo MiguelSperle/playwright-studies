@@ -1,12 +1,20 @@
-import { test as setup, expect } from '../../fixtures/base';
+import { test as setup, expect } from '../../fixtures';
 import { users } from '../../data/users';
+
+/**
+ * Setup de autenticação do Playwright.
+ *
+ * Faz o login uma única vez e salva o estado da sessão (cookies e
+ * localStorage) em um arquivo, para que os demais testes já comecem
+ * autenticados, sem precisar repetir o login em cada um.
+ */
 
 const authFile: string = 'playwright/.auth/user.json';
 
-setup('configure authenticated user', async ({ authenticationPage, page, context }) => {
-  await authenticationPage.goto();
+setup('configure authenticated user', async ({ pm, page, context }) => {
+  await pm.onAuthenticationPage().goto();
 
-  await authenticationPage.authenticate(users.STANDARD_USER.username, users.STANDARD_USER.password);
+  await pm.onAuthenticationPage().authenticate(users.STANDARD_USER.username, users.STANDARD_USER.password);
 
   await expect(page).toHaveURL('/inventory.html');
 
