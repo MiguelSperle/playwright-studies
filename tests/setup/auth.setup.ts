@@ -2,22 +2,28 @@ import { test as setup, expect } from '../../fixtures';
 import { users } from '../../data/users';
 
 /**
- * Setup de autenticação do Playwright.
+ * Configuração do estado de autenticação para os testes E2E.
  * 
- * A abordagem preferencial é realizar a autenticação via API durante o setup.
+ * Preferencialmente, a autenticação deve ser realizada via API durante o setup.
  * 
- * Caso a API de autenticação não esteja disponível, a autenticação pode ser realizado
- * pela interface (UI), permitindo validar o fluxo real de autenticação, mesmo que somente a nível de interface.
- */
+ * Caso a API de autenticação não esteja disponível, o estado autenticado pode
+ * ser simulado por meio da injeção direta com cookies ou com localStorage no contexto do navegador.
+**/
 
 const authFile: string = 'playwright/.auth/user.json';
 
-setup('authenticate', async ({ pm, page }) => {
-  await pm.onAuthenticationPage().goto();
-
-  await pm.onAuthenticationPage().authenticate(users.STANDARD_USER.username, users.STANDARD_USER.password);
-
-  await expect(page).toHaveURL('/inventory.html');
+setup('configure authentication state', async ({ page }) => {
+  await page.context().addCookies([
+    {
+      name: 'session-username',
+      value: users.STANDARD_USER.username,
+      domain: 'www.saucedemo.com',
+      path: '/',
+      httpOnly: false,
+      secure: false,
+      sameSite: 'Lax'
+    }
+  ]);
 
   await page.context().storageState({ path: authFile });
 }); 
