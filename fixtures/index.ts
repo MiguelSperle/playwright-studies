@@ -4,7 +4,7 @@ import { PageManager } from '../pages/manager/PageManager';
 /**
  * Responsabilidades:
  * - instancia os Page Objects e os disponibiliza automaticamente aos testes.
- * - prepara os estados necessários para a execução dos testes (geralmente prepara o recurso sob demanda, acessando diretamente a API).
+ * - geralmente prepara o recurso sob demanda, acessando diretamente a API quando disponível.
 **/
 
 type TestFixtures = {

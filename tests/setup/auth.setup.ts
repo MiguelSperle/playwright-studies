@@ -3,15 +3,16 @@ import { users } from '../../data/users';
 
 /**
  * Setup de autenticação do Playwright.
- *
- * Faz o login uma única vez e salva o estado da sessão (cookies e
- * localStorage) em um arquivo, para que os demais testes já comecem
- * autenticados, sem precisar repetir o login em cada um.
+ * 
+ * A abordagem preferencial é realizar a autenticação via API durante o setup.
+ * 
+ * Caso a API de autenticação não esteja disponível, a autenticação pode ser realizado
+ * pela interface (UI), permitindo validar o fluxo real de autenticação, mesmo que somente a nível de interface.
  */
 
 const authFile: string = 'playwright/.auth/user.json';
 
-setup('configure authenticated user', async ({ pm, page }) => {
+setup('authenticate', async ({ pm, page }) => {
   await pm.onAuthenticationPage().goto();
 
   await pm.onAuthenticationPage().authenticate(users.STANDARD_USER.username, users.STANDARD_USER.password);
