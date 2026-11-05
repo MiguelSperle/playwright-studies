@@ -44,7 +44,6 @@ test.describe('shopping cart', () => {
             await expect(pm.onInventoryPage().addToCartButton(products.BACKPACK_PRODUCT.name)).toBeVisible();
             await expect(pm.onInventoryPage().removeFromCartButton(products.BIKE_LIGHT_PRODUCT.name)).toBeVisible();
         });
-
     });
 
     test.describe('from the product details page', () => {
