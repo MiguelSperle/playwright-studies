@@ -2,16 +2,19 @@ import { Page } from "@playwright/test";
 import { AuthenticationPage } from '../authentication-page';
 import { InventoryPage } from '../inventory-page';
 import { ProductDetailsPage } from '../product-details-page';
+import { ShoppingCartPage } from '../shopping-cart-page';
 
 export class PageManager {
     private readonly authenticationPage: AuthenticationPage;
     private readonly inventoryPage: InventoryPage;
     private readonly productDetailsPage: ProductDetailsPage;
+    private readonly shoppingCartPage: ShoppingCartPage;
 
     constructor(private readonly page: Page) {
         this.authenticationPage = new AuthenticationPage(this.page);
         this.inventoryPage = new InventoryPage(this.page);
         this.productDetailsPage = new ProductDetailsPage(this.page);
+        this.shoppingCartPage = new ShoppingCartPage(this.page);
     }
 
     onAuthenticationPage(): AuthenticationPage {
@@ -24,5 +27,9 @@ export class PageManager {
 
     onProductDetailsPage(): ProductDetailsPage {
         return this.productDetailsPage;
+    }
+
+    onShoppingCartPage(): ShoppingCartPage {
+        return this.shoppingCartPage;
     }
 }
