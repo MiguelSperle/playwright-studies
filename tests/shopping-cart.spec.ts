@@ -23,21 +23,14 @@ test.describe('shopping cart', () => {
             await expect(pm.onInventoryPage().removeFromCartButton(products.BIKE_LIGHT_PRODUCT.name)).toBeVisible();
         });
 
-        test('should remove an added product from the shopping cart', async ({ pm }) => {
-            // PREPARANDO O ESTADO NECESSÁRIO DIRETAMENTE NO TESTE
-            await pm.onInventoryPage().clickAddToCartButton(products.BACKPACK_PRODUCT.name);
-
+        test('should remove an added product from the shopping cart', async ({ pm, shoppingCartWithProduct }) => {
             await pm.onInventoryPage().clickRemoveFromCartButton(products.BACKPACK_PRODUCT.name);
 
             await expect(pm.onInventoryPage().headerComponent.shoppingCartBadge).toBeHidden();
             await expect(pm.onInventoryPage().addToCartButton(products.BACKPACK_PRODUCT.name)).toBeVisible();
         });
 
-        test('should remove only one product when multiple products have been added to the shopping cart', async ({ pm }) => {
-            // PREPARANDO O ESTADO NECESSÁRIO DIRETAMENTE NO TESTE
-            await pm.onInventoryPage().clickAddToCartButton(products.BACKPACK_PRODUCT.name);
-            await pm.onInventoryPage().clickAddToCartButton(products.BIKE_LIGHT_PRODUCT.name);
-
+        test('should remove only one product when multiple products have been added to the shopping cart', async ({ pm, shoppingCartWithMultipleProducts }) => {
             await pm.onInventoryPage().clickRemoveFromCartButton(products.BACKPACK_PRODUCT.name);
 
             await expect(pm.onInventoryPage().headerComponent.shoppingCartBadge).toHaveText('1');
@@ -58,10 +51,7 @@ test.describe('shopping cart', () => {
             await expect(pm.onProductDetailsPage().removeFromCartButton).toBeVisible();
         });
 
-        test('should remove an added product from the shopping cart', async ({ pm }) => {
-            // PREPARANDO O ESTADO NECESSÁRIO DIRETAMENTE NO TESTE
-            await pm.onProductDetailsPage().clickAddToCartButton();
-
+        test('should remove an added product from the shopping cart', async ({ pm, shoppingCartWithProduct }) => {
             await pm.onProductDetailsPage().clickRemoveFromCartButton();
 
             await expect(pm.onProductDetailsPage().headerComponent.shoppingCartBadge).toBeHidden();
